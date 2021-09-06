@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class GunFire : MonoBehaviour
 {
 
@@ -12,6 +11,10 @@ public class GunFire : MonoBehaviour
     [Range(1, 10)] int damage = 1;
 
     [SerializeField] private Transform firePoint;
+
+    [SerializeField] LayerMask aimCollliderLayerMask = new LayerMask();
+
+    [SerializeField] Transform debugTransform;
 
     public ParticleSystem muzzleFire;
 
@@ -42,6 +45,14 @@ public class GunFire : MonoBehaviour
             
 
         }
+        Vector2 screenCenterPoint = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        Ray ray = Camera.main.ScreenPointToRay(screenCenterPoint);
+
+        if (Physics.Raycast(ray, out RaycastHit rayCastHit, 999f, aimCollliderLayerMask))
+        {
+            debugTransform.position = rayCastHit.point;
+        }
+
     }
 
     private IEnumerator PlayParticleEffect()
